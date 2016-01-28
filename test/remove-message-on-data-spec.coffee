@@ -10,5 +10,10 @@ describe 'RemoveMessageOnData', ->
 
   describe '->onEnvelope', ->
     describe 'when called with an envelope', ->
-      it 'should return the message', ->
-        expect(@sut.onEnvelope({message: 'anything'})).to.deep.equal 'anything'
+      it 'should remove the message from data using the transactionId', ->
+        result = @sut.onEnvelope({data: {'yo-transaction-id': true}, message: {transactionId: 'yo-transaction-id'}})
+        expect(result).to.deep.equal {}
+
+      it 'should not change data', ->
+        result = @sut.onEnvelope({data: {'yo-transaction-id': true}, message: {}})
+        expect(result).to.deep.equal {'yo-transaction-id': true}
